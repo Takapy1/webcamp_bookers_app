@@ -11,6 +11,9 @@ class BooksController < ApplicationController
       flash[:notice] = "Book was successfully created."
       redirect_to book_url(@book)
     else
+      # ページ遷移したときにindexアクションが呼ばれるわけではなく、
+      # indexテンプレが呼ばれるだけなので@booksの初期化が必要。
+      # オブジェクト(@book)はindexアクションで生成して、見つけてきているので初期化の必要はない
       @books = Book.all
       render :index
     end
@@ -25,8 +28,8 @@ class BooksController < ApplicationController
   end
 
   def update
-    @book = Book.find(params[:id])
-    if @book.update(book_params)
+    book = Book.find(params[:id])
+    if book.update(book_params)
       flash[:notice] = "Book was successfully updated."
       redirect_to book_url
     else
